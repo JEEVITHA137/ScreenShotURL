@@ -10,18 +10,30 @@ app.use(bodyParser.urlencoded({ extended: true }));
 var webshot = require('node-webshot');
 
 var options = {
-  screenSize: {
+  windowSize: {
      width: 1024,
      height: 768 
   },
  shotSize: {
    height: 'all'
-  }
-
+  },
+  quality:75,
+  renderDelay:20
 };
 
-webshot('https://www.w3schools.com/', 'google.jpeg', options, function(err) {
-  // screenshot now saved to flickr.jpeg
+
+app.get('/:link',(req,res) => {
+  console.log(req.params.link)
+
+
+  // webshot(req.params.link, 'google.png', options, function(err) {
+  //   if(err)  
+  //     console.log(err);
+  //   else
+  //     console.log("ScreenShot Ready");
+  // });
 });
+
+
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
