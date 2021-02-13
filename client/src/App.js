@@ -6,13 +6,13 @@ class App extends Component{
     api:"7d76b3d273a34ccf9980b49801b72e71",
     link:"",
     img:"",
-    option:"jpeg",
     quality:70,
-    showValue:"none"
+    showValue:"none",
+    selectedOption:"Png"
   }
 
   takeScreenshot = async() => {
-    const response = await fetch(`https://api.apiflash.com/v1/urltoimage?access_key=${this.state.api}&delay=10&format=${this.state.option}&full_page=true&quality=${this.state.quality}&url=${this.state.link}`);
+    const response = await fetch(`https://api.apiflash.com/v1/urltoimage?access_key=${this.state.api}&delay=10&format=${this.state.selectedOption}&full_page=true&quality=${this.state.quality}&url=${this.state.link}`);
     if(response.ok)
     {
       this.setState({
@@ -23,6 +23,12 @@ class App extends Component{
       console.log("error")
   }
      
+  handleOptionChange = (e) =>{
+    this.setState({
+      selectedOption:e.target.value
+    })
+  }
+
   render(){
     return(
       <div>
@@ -31,7 +37,7 @@ class App extends Component{
             <BsIcons.BsX className="closeIcon" onClick={()=>(this.setState({link:""}))}/>
             <BsIcons.BsCamera className="buttonIcon" onClick={this.takeScreenshot}/>
         </div>
-
+        <div className="row d-flex">
         <div className="range">
               <div className="sliderValue">
                 <span style={{left:(this.state.quality/2)*1.4+"%"}}>{this.state.quality}</span>
@@ -41,6 +47,12 @@ class App extends Component{
                 <input type="range" min="0" max="100" value={this.state.quality} onChange={(e)=>(this.setState({quality:e.target.value}))} steps="1"/>
                 <div className="value right">100</div>
               </div>
+        </div>
+
+        <div className="format row d-flex">
+          <div className="row d-flex pr-5"><input type="radio" value="Png" checked={this.state.selectedOption === 'Png'} onChange={this.handleOptionChange} /><label>Png</label></div>
+          <div className="row d-flex pl-5"><input type="radio" value="Jpg" checked={this.state.selectedOption === 'Jpg'} onChange={this.handleOptionChange} /><label>Jpg</label></div>
+        </div>
         </div>
         <div className="form">
 
@@ -1442,8 +1454,9 @@ class App extends Component{
         </div>
         </section>
 
-
+        
         <div className="container">
+        <div className="button">Download</div>
           <div className="row justify-content-center p-2">
           <img className="col-md-12" src={this.state.img.url} ></img>
           <img className="col-md-12" src='./urltoimage.jpeg' ></img>
@@ -1458,7 +1471,9 @@ class App extends Component{
           </div>
           </div>
         </div>
+        <div className="footer">
         <div>Designed by Jeevitha Venkatesan</div>
+        </div>
       </div>
     );
   }
