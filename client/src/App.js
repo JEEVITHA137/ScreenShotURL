@@ -7,7 +7,8 @@ class App extends Component{
     link:"",
     img:"",
     option:"jpeg",
-    quality:70
+    quality:70,
+    showValue:"none"
   }
 
   takeScreenshot = async() => {
@@ -25,6 +26,33 @@ class App extends Component{
   render(){
     return(
       <div>
+        <div className="searchBox">
+            <input className="textBox" type="text" value={this.state.link} onChange={(e)=>{this.setState({link:e.target.value})}} placeholder="Paste the Link"></input>
+            <BsIcons.BsX className="closeIcon" onClick={()=>(this.setState({link:""}))}/>
+            <BsIcons.BsCamera className="buttonIcon" onClick={this.takeScreenshot}/>
+        </div>
+
+        <div className="range">
+              <div className="sliderValue">
+                <span style={{left:(this.state.quality/2)*1.4+"%"}}>{this.state.quality}</span>
+              </div>
+              <div className="field">
+                <div className="value left">0</div>
+                <input type="range" min="0" max="100" value={this.state.quality} onChange={(e)=>(this.setState({quality:e.target.value}))} steps="1"/>
+                <div className="value right">100</div>
+              </div>
+        </div>
+        <div className="form">
+
+            
+
+            {/* <select value={this.state.option} onChange={(e)=>(this.setState({option:e.target.value}))}>
+              <option value="png">Png</option>
+              <option value="jpeg">Jpg</option>
+            </select> */}
+
+
+        </div>
         <section>
         <div className="row">
           <div>
@@ -1412,23 +1440,14 @@ class App extends Component{
               <BsIcons.BsCamera className="icons"/>
           </div>
         </div>
-          <div className="form">
-            <div className="row justify-content-center pt-5">
-            <input type="text" value={this.state.link} onChange={(e)=>{this.setState({link:e.target.value})}}></input>
-            <button onClick={this.takeScreenshot}>Take Screenshot</button>
-            <select value={this.state.option} onChange={(e)=>(this.setState({option:e.target.value}))}>
-              <option value="png">Png</option>
-              <option value="jpeg">Jpg</option>
-            </select>
-            </div>
-          </div>
         </section>
 
+
         <div className="container">
-          {/* <div className="row justify-content-center p-2">
+          <div className="row justify-content-center p-2">
           <img className="col-md-12" src={this.state.img.url} ></img>
           <img className="col-md-12" src='./urltoimage.jpeg' ></img>
-          </div> */}
+          </div>
           <div className="loading justify-content-center">
           <span className="girl"></span>
           <div className="boy">
