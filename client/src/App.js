@@ -5,28 +5,73 @@ class App extends Component{
   state = {
     api:"7d76b3d273a34ccf9980b49801b72e71",
     link:"",
-    img:"",
+    img:"d4e7ec7f-f433-494a-b730-158f6010eb82.png",
     quality:70,
     showValue:"none",
-    selectedOption:"Png"
+    selectedOption:"png",
+    hostname:"http://localhost:5000/",
+    downloadURL:"Http://localhost:5000/download/",
+    loading: false,
+    fetchError: false
   }
 
-  takeScreenshot = async() => {
-    const response = await fetch(`https://api.apiflash.com/v1/urltoimage?access_key=${this.state.api}&delay=10&format=${this.state.selectedOption}&full_page=true&quality=${this.state.quality}&url=${this.state.link}`);
-    if(response.ok)
+  takeScreenshot = () => {
+    this.setState({
+      loading: true,
+      fetchError: false,
+      img:" "
+    })
+
+    const values = {
+      format:this.state.selectedOption,
+      url:this.state.link,
+      quality:this.state.quality
+    };
+
+    const headers = {
+      method:'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(values)
+  };
+            
+  fetch( `${this.state.hostname}shot`, headers)
+    .then(response=>response.json())
+    .then(response=>{
+      console.log(response.fileName)
+      if(!response.fileName)
+      {
+        this.setState({
+          loading :  false,
+          fetchError : true
+        })
+        return;
+      }
+      this.setState({
+        loading: false,
+        img: response.fileName
+      })
+    })
+    .catch(err=>{
+      this.setState({
+        loading:false,
+        fetchError:true
+      })
+      console.log(err);
+    })
+  }
+
+  handleOptionChange = (e) =>{
+    if(this.state.selectedOption === "jpeg")
     {
       this.setState({
-        img:response
+        selectedOption:"png"
       })
     }
-    else
-      console.log("error")
-  }
-     
-  handleOptionChange = (e) =>{
-    this.setState({
-      selectedOption:e.target.value
-    })
+    else{
+      this.setState({
+        selectedOption:"jpeg"
+      })
+    }
   }
 
   render(){
@@ -50,21 +95,11 @@ class App extends Component{
         </div>
 
         <div className="format row d-flex">
-          <div className="row d-flex pr-5"><input type="radio" value="Png" checked={this.state.selectedOption === 'Png'} onChange={this.handleOptionChange} /><label>Png</label></div>
-          <div className="row d-flex pl-5"><input type="radio" value="Jpg" checked={this.state.selectedOption === 'Jpg'} onChange={this.handleOptionChange} /><label>Jpg</label></div>
+          <div className="row d-flex pr-5"><input type="checkbox" value="png" checked={this.state.selectedOption === 'png'} onClick={this.handleOptionChange}  /><label>png</label></div>
+          <div className="row d-flex pl-5"><input type="checkbox" value="jpeg" checked={this.state.selectedOption === 'jpeg'} onClick={this.handleOptionChange} /><label>jpeg</label></div>
         </div>
         </div>
-        <div className="form">
 
-            
-
-            {/* <select value={this.state.option} onChange={(e)=>(this.setState({option:e.target.value}))}>
-              <option value="png">Png</option>
-              <option value="jpeg">Jpg</option>
-            </select> */}
-
-
-        </div>
         <section>
         <div className="row">
           <div>
@@ -1454,23 +1489,27 @@ class App extends Component{
         </div>
         </section>
 
-        
+        <div className="main"> 
         <div className="container">
-        <div className="button">Download</div>
-          <div className="row justify-content-center p-2">
-          <img className="col-md-12" src={this.state.img.url} ></img>
-          <img className="col-md-12" src='./urltoimage.jpeg' ></img>
-          </div>
-          <div className="loading justify-content-center">
-          <span className="girl"></span>
-          <div className="boy">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-          </div>
-        </div>
+  
+          { this.state.loading === true 
+              ? <div className="loading justify-content-center">
+                <span className="girl"></span>
+                <div className="boy">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+                </div>
+              :  this.state.img === '' ? null
+              :<div className="row justify-content-center p-2">
+                <img className="col-md-12" src={this.state.hostname+this.state.img} alt={"."}></img>
+                <a className="button" onClick={this.download} href={this.state.downloadURL+this.state.img}>Download</a>
+                </div>
+          }
+          
+        </div></div>
         <div className="footer">
         <div>Designed by Jeevitha Venkatesan</div>
         </div>
