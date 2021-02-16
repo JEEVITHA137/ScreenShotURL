@@ -17,6 +17,11 @@ section
 .main{
   background-color: #222;
 }
+
+.main img{
+   margin: 30px 0px;
+}
+
 section .row{
   position: relative;
   top: -45%;
@@ -66,6 +71,12 @@ section .row div:nth-child(2)
 } 
 
 .loading{
+  position: absolute;
+  justify-content: center;
+  top:30%;
+  left: 55%;
+  transform: translate(-45%,-50%);
+  z-index: 2;
   width: 8em;
   height: 1em;
   font-size: 35px;
@@ -194,8 +205,8 @@ section .row div:nth-child(2)
 
 .searchBox:hover .textBox{
   width: 28rem;
-  padding: 0 6px;
-
+  padding-right: 52px;
+  padding-left: 6px;
 }
 
 .searchBox:hover .buttonIcon{
@@ -302,7 +313,6 @@ section .row div:nth-child(2)
   cursor: pointer;
 }
 
-
 .range:hover .sliderValue span{
   display: inline;
 }
@@ -371,10 +381,16 @@ input[type="checkbox"]:checked::before{
   border-radius: 50px;
   padding: 6px 0;
   background-color: #2f3640;
-  box-shadow: 0 0 20px  #50BFE6;
+  box-shadow: 0 0 5px  #50BFE6;
   cursor: pointer;
   color: #50BFE6;
   border: 3px solid  #50BFE6;
+}
+
+.button:hover{
+  color: #50BFE6;
+  text-decoration: none;
+  box-shadow: 0 0 10px  #50BFE6;
 }
 
 .footer
@@ -543,5 +559,18 @@ input[type="checkbox"]:checked::before{
   }
   100%{
     transform: translateX(0%);
+  }
+}
+
+@media only screen and (max-width: 861px){
+  .format{
+    top: 60%;
+    left: 50%;
+    transform: translate(-20%,60%);
+  }
+
+  .range{
+    left: 50%;
+    transform: translateX(-50%);
   }
 }

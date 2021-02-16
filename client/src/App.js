@@ -5,9 +5,8 @@ class App extends Component{
   state = {
     api:"7d76b3d273a34ccf9980b49801b72e71",
     link:"",
-    img:"d4e7ec7f-f433-494a-b730-158f6010eb82.png",
+    img:"",
     quality:70,
-    showValue:"none",
     selectedOption:"png",
     hostname:"http://localhost:5000/",
     downloadURL:"Http://localhost:5000/download/",
@@ -48,7 +47,10 @@ class App extends Component{
       }
       this.setState({
         loading: false,
-        img: response.fileName
+        img: response.fileName,
+        link:"",
+        quality:70,
+        selectedOption:"png",
       })
     })
     .catch(err=>{
@@ -77,11 +79,24 @@ class App extends Component{
   render(){
     return(
       <div>
-        <div className="searchBox">
-            <input className="textBox" type="text" value={this.state.link} onChange={(e)=>{this.setState({link:e.target.value})}} placeholder="Paste the Link"></input>
-            <BsIcons.BsX className="closeIcon" onClick={()=>(this.setState({link:""}))}/>
-            <BsIcons.BsCamera className="buttonIcon" onClick={this.takeScreenshot}/>
-        </div>
+        {
+          this.state.loading === true 
+            ? <div className="loading justify-content-center">
+              <span className="girl"></span>
+              <div className="boy">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+              </div>
+            : <div className="searchBox">
+                <input className="textBox" type="text" value={this.state.link} onChange={(e)=>{this.setState({link:e.target.value})}} placeholder="Paste the Link"></input>
+                <BsIcons.BsX className="closeIcon" onClick={()=>(this.setState({link:""}))}/>
+                <BsIcons.BsCamera className="buttonIcon" onClick={this.takeScreenshot}/>
+              </div>
+        }
+
         <div className="row d-flex">
         <div className="range">
               <div className="sliderValue">
@@ -1492,23 +1507,12 @@ class App extends Component{
         <div className="main"> 
         <div className="container">
   
-          { this.state.loading === true 
-              ? <div className="loading justify-content-center">
-                <span className="girl"></span>
-                <div className="boy">
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                </div>
-                </div>
-              :  this.state.img === '' ? null
+          { this.state.img === ' ' ? null
               :<div className="row justify-content-center p-2">
                 <img className="col-md-12" src={this.state.hostname+this.state.img} alt={"."}></img>
                 <a className="button" onClick={this.download} href={this.state.downloadURL+this.state.img}>Download</a>
                 </div>
           }
-          
         </div></div>
         <div className="footer">
         <div>Designed by Jeevitha Venkatesan</div>
