@@ -34,7 +34,7 @@ app.post('/shot',(req,res) => {
       url: "https://api.apiflash.com/v1/urltoimage",
       encoding: "binary",
       qs: {
-          access_key: "7d76b3d273a34ccf9980b49801b72e71",
+          access_key: process.env.API_KEY,
           url: req.body.url,
           quality: req.body.quality,
           format: req.body.format,
