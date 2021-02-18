@@ -8,58 +8,83 @@ class App extends Component{
     img:"",
     quality:70,
     selectedOption:"png",
-    hostname:"http://localhost:5000/",
-    downloadURL:"Http://localhost:5000/download/",
+    hostname:"https://screenshoturl-server.herokuapp.com/",
+    downloadURL:"https://screenshoturl-server.herokuapp.com/download/",
     loading: false,
-    fetchError: false
+    fetchError: false,
+  }
+
+   validURL = (str) => {
+    let pattern = new RegExp('^(https?:\\/\\/)?'+
+      '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ 
+      '((\\d{1,3}\\.){3}\\d{1,3}))'+ 
+      '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ 
+      '(\\?[;&a-z\\d%_.~+=-]*)?'+ 
+      '(\\#[-a-z\\d_]*)?$','i'); 
+    return !!pattern.test(str);
   }
 
   takeScreenshot = () => {
+
     this.setState({
       loading: true,
       fetchError: false,
       img:" "
     })
 
-    const values = {
-      format:this.state.selectedOption,
-      url:this.state.link,
-      quality:this.state.quality
-    };
-
-    const headers = {
-      method:'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(values)
-  };
-            
-  fetch( `${this.state.hostname}shot`, headers)
-    .then(response=>response.json())
-    .then(response=>{
-      console.log(response.fileName)
-      if(!response.fileName)
-      {
-        this.setState({
-          loading :  false,
-          fetchError : true
+    if(this.validURL(this.state.link))
+    {
+      const values = {
+        format:this.state.selectedOption,
+        url:this.state.link,
+        quality:this.state.quality
+      };
+  
+      const headers = {
+        method:'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(values)
+      };
+                
+      fetch( `${this.state.hostname}shot`, headers)
+        .then(response=>response.json())
+        .then(response=>{
+          console.log(response.fileName)
+          if(!response.fileName)
+          {
+            this.setState({
+              loading :  false,
+              fetchError : true
+            })
+            return;
+          }
+          this.setState({
+            loading: false,
+            img: response.fileName,
+            link:"",
+            quality:70,
+            selectedOption:"png",
+          })
         })
-        return;
-      }
+        .catch(err=>{
+          this.setState({
+            loading:false,
+            fetchError:true
+          })
+          console.log(err);
+        })
+    }
+    else
+    {
       this.setState({
-        loading: false,
-        img: response.fileName,
+        fetchError: true,
+        loading:false,
+        img:" ",
         link:"",
         quality:70,
         selectedOption:"png",
       })
-    })
-    .catch(err=>{
-      this.setState({
-        loading:false,
-        fetchError:true
-      })
-      console.log(err);
-    })
+    }
   }
 
   handleOptionChange = (e) =>{
@@ -89,11 +114,12 @@ class App extends Component{
                 <span></span>
                 <span></span>
               </div>
-              </div>
-            : <div className="searchBox">
-                <input className="textBox" type="text" value={this.state.link} onChange={(e)=>{this.setState({link:e.target.value})}} placeholder="Paste the Link"></input>
-                <BsIcons.BsX className="closeIcon" onClick={()=>(this.setState({link:""}))}/>
+              </div> 
+            :   <div className="searchBox">
+                <input className="textBox" type="text" value={this.state.link} onChange={(e)=>{this.setState({link:e.target.value,fetchError:false,img:""})}} placeholder="Paste the Link"></input>
+                <BsIcons.BsX className="closeIcon" onClick={()=>(this.setState({link:"",fetchError:false,img:""}))}/>
                 <BsIcons.BsCamera className="buttonIcon" onClick={this.takeScreenshot}/>
+                {this.state.fetchError === true ? <div className="error">Invalid URL</div> : null}
               </div>
         }
 
@@ -1502,17 +1528,146 @@ class App extends Component{
               <BsIcons.BsCamera className="icons"/>
           </div>
         </div>
+        <div className="row">
+          <div>
+              <BsIcons.BsFillBriefcaseFill className="icons"/>
+              <BsIcons.BsAlarmFill className="icons"/>
+              <BsIcons.BsFillBrightnessHighFill className="icons"/>
+              <BsIcons.BsFillChatDotsFill className="icons"/>
+              <BsIcons.BsFillPersonLinesFill className="icons"/>
+              <BsIcons.BsFillStarFill className="icons"/>
+              <BsIcons.BsFillTerminalFill className="icons"/>
+              <BsIcons.BsImageFill className="icons"/>
+              <BsIcons.BsHouseDoorFill className="icons"/>
+              <BsIcons.BsMoon className="icons"/>
+              <BsIcons.BsSun className="icons"/>
+              <BsIcons.BsTrophy className="icons"/>
+              <BsIcons.BsPuzzleFill className="icons"/>
+              <BsIcons.BsMicFill className="icons"/>
+              <BsIcons.BsHeartFill className="icons"/>
+              <BsIcons.BsGridFill className="icons"/>
+              <BsIcons.BsGiftFill className="icons"/>
+              <BsIcons.BsFolderFill className="icons"/>
+              <BsIcons.BsCloudFill className="icons"/>
+              <BsIcons.BsCamera className="icons"/>
+              <BsIcons.BsFillBriefcaseFill className="icons"/>
+              <BsIcons.BsAlarmFill className="icons"/>
+              <BsIcons.BsFillBrightnessHighFill className="icons"/>
+              <BsIcons.BsFillChatDotsFill className="icons"/>
+              <BsIcons.BsFillPersonLinesFill className="icons"/>
+              <BsIcons.BsFillStarFill className="icons"/>
+              <BsIcons.BsFillTerminalFill className="icons"/>
+              <BsIcons.BsImageFill className="icons"/>
+              <BsIcons.BsHouseDoorFill className="icons"/>
+              <BsIcons.BsMoon className="icons"/>
+              <BsIcons.BsSun className="icons"/>
+              <BsIcons.BsTrophy className="icons"/>
+              <BsIcons.BsPuzzleFill className="icons"/>
+              <BsIcons.BsMicFill className="icons"/>
+              <BsIcons.BsHeartFill className="icons"/>
+              <BsIcons.BsGridFill className="icons"/>
+              <BsIcons.BsGiftFill className="icons"/>
+              <BsIcons.BsFolderFill className="icons"/>
+              <BsIcons.BsCloudFill className="icons"/>
+              <BsIcons.BsCamera className="icons"/>
+              <BsIcons.BsFillBriefcaseFill className="icons"/>
+              <BsIcons.BsAlarmFill className="icons"/>
+              <BsIcons.BsFillBrightnessHighFill className="icons"/>
+              <BsIcons.BsFillChatDotsFill className="icons"/>
+              <BsIcons.BsFillPersonLinesFill className="icons"/>
+              <BsIcons.BsFillStarFill className="icons"/>
+              <BsIcons.BsFillTerminalFill className="icons"/>
+              <BsIcons.BsImageFill className="icons"/>
+              <BsIcons.BsHouseDoorFill className="icons"/>
+              <BsIcons.BsMoon className="icons"/>
+              <BsIcons.BsSun className="icons"/>
+              <BsIcons.BsTrophy className="icons"/>
+              <BsIcons.BsPuzzleFill className="icons"/>
+              <BsIcons.BsMicFill className="icons"/>
+              <BsIcons.BsHeartFill className="icons"/>
+              <BsIcons.BsGridFill className="icons"/>
+              <BsIcons.BsGiftFill className="icons"/>
+              <BsIcons.BsFolderFill className="icons"/>
+              <BsIcons.BsCloudFill className="icons"/>
+              <BsIcons.BsCamera className="icons"/>
+          </div>
+          <div>
+              <BsIcons.BsFillBriefcaseFill className="icons"/>
+              <BsIcons.BsAlarmFill className="icons"/>
+              <BsIcons.BsFillBrightnessHighFill className="icons"/>
+              <BsIcons.BsFillChatDotsFill className="icons"/>
+              <BsIcons.BsFillPersonLinesFill className="icons"/>
+              <BsIcons.BsFillStarFill className="icons"/>
+              <BsIcons.BsFillTerminalFill className="icons"/>
+              <BsIcons.BsImageFill className="icons"/>
+              <BsIcons.BsHouseDoorFill className="icons"/>
+              <BsIcons.BsMoon className="icons"/>
+              <BsIcons.BsSun className="icons"/>
+              <BsIcons.BsTrophy className="icons"/>
+              <BsIcons.BsPuzzleFill className="icons"/>
+              <BsIcons.BsMicFill className="icons"/>
+              <BsIcons.BsHeartFill className="icons"/>
+              <BsIcons.BsGridFill className="icons"/>
+              <BsIcons.BsGiftFill className="icons"/>
+              <BsIcons.BsFolderFill className="icons"/>
+              <BsIcons.BsCloudFill className="icons"/>
+              <BsIcons.BsCamera className="icons"/>
+              <BsIcons.BsFillBriefcaseFill className="icons"/>
+              <BsIcons.BsAlarmFill className="icons"/>
+              <BsIcons.BsFillBrightnessHighFill className="icons"/>
+              <BsIcons.BsFillChatDotsFill className="icons"/>
+              <BsIcons.BsFillPersonLinesFill className="icons"/>
+              <BsIcons.BsFillStarFill className="icons"/>
+              <BsIcons.BsFillTerminalFill className="icons"/>
+              <BsIcons.BsImageFill className="icons"/>
+              <BsIcons.BsHouseDoorFill className="icons"/>
+              <BsIcons.BsMoon className="icons"/>
+              <BsIcons.BsSun className="icons"/>
+              <BsIcons.BsTrophy className="icons"/>
+              <BsIcons.BsPuzzleFill className="icons"/>
+              <BsIcons.BsMicFill className="icons"/>
+              <BsIcons.BsHeartFill className="icons"/>
+              <BsIcons.BsGridFill className="icons"/>
+              <BsIcons.BsGiftFill className="icons"/>
+              <BsIcons.BsFolderFill className="icons"/>
+              <BsIcons.BsCloudFill className="icons"/>
+              <BsIcons.BsCamera className="icons"/>
+              <BsIcons.BsFillBriefcaseFill className="icons"/>
+              <BsIcons.BsAlarmFill className="icons"/>
+              <BsIcons.BsFillBrightnessHighFill className="icons"/>
+              <BsIcons.BsFillChatDotsFill className="icons"/>
+              <BsIcons.BsFillPersonLinesFill className="icons"/>
+              <BsIcons.BsFillStarFill className="icons"/>
+              <BsIcons.BsFillTerminalFill className="icons"/>
+              <BsIcons.BsImageFill className="icons"/>
+              <BsIcons.BsHouseDoorFill className="icons"/>
+              <BsIcons.BsMoon className="icons"/>
+              <BsIcons.BsSun className="icons"/>
+              <BsIcons.BsTrophy className="icons"/>
+              <BsIcons.BsPuzzleFill className="icons"/>
+              <BsIcons.BsMicFill className="icons"/>
+              <BsIcons.BsHeartFill className="icons"/>
+              <BsIcons.BsGridFill className="icons"/>
+              <BsIcons.BsGiftFill className="icons"/>
+              <BsIcons.BsFolderFill className="icons"/>
+              <BsIcons.BsCloudFill className="icons"/>
+              <BsIcons.BsCamera className="icons"/>
+          </div>
+        </div>
         </section>
 
         <div className="main"> 
         <div className="container">
   
-          { this.state.img === ' ' ? null
-              :<div className="row justify-content-center p-2">
+          { this.state.img === '' ? null
+              : this.state.loading === false && this.state.fetchError === false
+              ? <div className="row justify-content-center p-2">
                 <img className="col-md-12" src={this.state.hostname+this.state.img} alt={"."}></img>
                 <a className="button" onClick={this.download} href={this.state.downloadURL+this.state.img}>Download</a>
                 </div>
+              : null
           }
+
         </div></div>
         <div className="footer">
         <div>Designed by Jeevitha Venkatesan</div>
